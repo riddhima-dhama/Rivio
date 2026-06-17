@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #E7D9B6;
+    font-family: 'Poppins', sans-serif;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px;
+}
+
+.card {
+    width: 430px;
+    background: #F7F3EA;
+
+    border-radius: 45px;
+
+    padding: 35px;
+
+    box-shadow:
+        0px 25px 60px rgba(0,0,0,0.08);
+}
+
+.top-right {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-bottom: 20px;
+}
+
+.notification {
+    width: 55px;
+    height: 55px;
+
+    background: white;
+    border-radius: 18px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+
+    box-shadow:
+        0px 8px 20px rgba(0,0,0,0.05);
+}
+
+.logo {
+    text-align: center;
+
+    font-size: 64px;
+    color: #243424;
+
+    margin-bottom: 10px;
+}
+
+.tagline {
+    text-align: center;
+
+    font-size: 22px;
+    color: #666;
+
+    margin-bottom: 35px;
+}
+
+.illustration {
+    text-align: center;
+
+    font-size: 85px;
+
+    margin-bottom: 35px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+    margin-bottom: 35px;
+}
+
+button {
+    border: none;
+
+    padding: 20px;
+
+    border-radius: 22px;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+}
+
+.primary-btn {
+    background: #355E3B;
+    color: white;
+}
+
+.secondary-btn {
+    background: white;
+    color: #243424;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-bottom: 35px;
+}
+
+.feature-card {
+    background: white;
+
+    padding: 16px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    color: #555;
+    font-size: 18px;
+}
+
+.bottom-nav {
+    background: #243424;
+
+    border-radius: 25px;
+
+    padding: 18px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-item {
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.add {
+    background: white;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
