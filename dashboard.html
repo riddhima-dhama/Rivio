@@ -1,9 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Rivio</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Dashboard Page</h1>
+
+    <div class="dashboard-card">
+
+        <h1 id="welcome">
+            Hey 👋
+        </h1>
+
+        <p class="welcome-text">
+            Welcome back!
+        </p>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h2 id="streak-count">0</h2>
+                <p>🔥 Days</p>
+            </div>
+
+            <div class="stat-card">
+                <h2 id="task-count">0</h2>
+                <p>📋 Tasks</p>
+            </div>
+
+            <div class="stat-card">
+                <h2 id="progress-count">0%</h2>
+                <p>📈 Progress</p>
+            </div>
+
+        </div>
+
+        <button
+            class="primary-btn"
+            id="addTaskBtn">
+            + Add Task
+        </button>
+
+        <div class="tasks">
+
+            <h2>Today's Tasks</h2>
+
+            <p
+                class="empty-text"
+                id="emptyText">
+                No tasks yet.
+            </p>
+
+            <div id="taskContainer"></div>
+
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+
+            <div class="nav-item">
+                🏠
+            </div>
+
+            <div class="nav-item">
+                <a href="calendar.html">
+                    📅
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="analytics.html">
+                    📊
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="settings.html">
+                    ⚙️
+                </a>
+            </div>
+
+        </nav>
+
+    </div>
+
+    <!-- Add Task Modal -->
+    <div
+        class="modal"
+        id="taskModal">
+
+        <div class="modal-content">
+
+            <h2>Add New Task</h2>
+
+            <input
+                type="text"
+                id="taskName"
+                placeholder="Enter task name"
+            >
+
+            <input
+                type="date"
+                id="taskDate"
+            >
+            <select id="taskCategory">
+
+    <option value="📚 Study">
+        📚 Study
+    </option>
+
+    <option value="💻 Coding">
+        💻 Coding
+    </option>
+
+    <option value="🏋️ Health">
+        🏋️ Health
+    </option>
+
+    <option value="🏠 Personal">
+        🏠 Personal
+    </option>
+
+</select>
+
+            <button
+                class="primary-btn"
+                id="saveTaskBtn">
+                Save Task
+            </button>
+            <input
+    type="text"
+    id="searchInput"
+    placeholder="🔍 Search tasks..."
+    <div class="filters">
+
+    <button
+        class="filter-btn active"
+        data-filter="all">
+        All
+    </button>
+
+    <button
+        class="filter-btn"
+        data-filter="pending">
+        Pending
+    </button>
+
+    <button
+        class="filter-btn"
+        data-filter="completed">
+        Completed
+    </button>
+
+</div>
+>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
