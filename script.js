@@ -179,12 +179,7 @@ const taskCount =
 
 if (addTaskBtn) {
 
-    let tasks =
-        JSON.parse(
-            localStorage.getItem(
-                "tasks"
-            )
-        ) || [];
+    let tasks= [];
 
     let streak =
         parseInt(
@@ -237,6 +232,29 @@ if (addTaskBtn) {
 
 let currentFilter =
     "all";
+    async function loadTasks() {
+
+    try {
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/tasks"
+            );
+
+        tasks =
+            await response.json();
+
+        displayTasks();
+
+    }
+    catch (error) {
+
+        console.log(
+            "Error loading tasks:",
+            error
+        );
+    }
+}
     function updateDueTodayBanner() {
 
     const today =
@@ -247,7 +265,7 @@ let currentFilter =
     const dueTodayTasks =
         tasks.filter(
             task =>
-                task.dueDate === today &&
+                task.due_date === today &&
                 !task.completed
         );
 
@@ -281,7 +299,7 @@ let currentFilter =
     tasks.filter((task) => {
 
         const matchesSearch =
-            task.name
+            task.title
                 .toLowerCase()
                 .includes(
                     searchText
@@ -379,14 +397,14 @@ let currentFilter =
                         }">
 
                             ${task.category}
-                            ${task.name}
+                            ${task.title}
 
                         </span>
 
                         <p>
                             📅 Due:
                             ${
-                                task.dueDate ||
+                                task.due_date ||
                                 "No Date"
                             }
                         </p>
@@ -451,7 +469,7 @@ let currentFilter =
 
     saveTaskBtn.addEventListener(
         "click",
-        () => {
+        async () => {
 
             if (
                 taskName.value.trim() ===
@@ -460,34 +478,30 @@ let currentFilter =
                 return;
             }
 
-           tasks.push({
-    name:
-        taskName.value,
+           await fetch(
+    "http://127.0.0.1:5000/tasks",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type":
+                "application/json"
+        },
+        body: JSON.stringify({
+            user_id: 1,
+            title: taskName.value,
+            due_date: taskDate.value,
+            category: taskCategory.value
+        })
+    }
+);
 
-    dueDate:
-        taskDate.value,
+taskName.value = "";
+taskDate.value = "";
 
-    category:
-        taskCategory.value,
+taskModal.style.display =
+    "none";
 
-    completed:
-        false
-});
-
-            localStorage.setItem(
-                "tasks",
-                JSON.stringify(
-                    tasks
-                )
-            );
-
-            displayTasks();
-
-            taskName.value = "";
-            taskDate.value = "";
-
-            taskModal.style.display =
-                "none";
+loadTasks();
         }
     );
 
@@ -519,111 +533,83 @@ let currentFilter =
 }
 
     window.completeTask =
-        function (index) {
+    async function (index) {
 
-            tasks[index].completed =
-                !tasks[index]
-                    .completed;
+        const task =
+            tasks[index];
 
-            if (
-                tasks[index]
-                    .completed
-            ) {
-
-                const today =
-                    new Date()
-                        .toDateString();
-
-                if (
-                    lastCompletedDate
-                    !== today
-                ) {
-
-                    streak++;
-
-                    lastCompletedDate =
-                        today;
-
-                    localStorage.setItem(
-                        "streak",
-                        streak
-                    );
-
-                    localStorage.setItem(
-                        "lastCompletedDate",
-                        today
-                    );
-                }
+        await fetch(
+            `http://127.0.0.1:5000/tasks/${task.id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    completed:
+                        !task.completed
+                })
             }
+        );
 
-            localStorage.setItem(
-                "tasks",
-                JSON.stringify(
-                    tasks
-                )
-            );
+        loadTasks();
+    };
 
-            displayTasks(
-                searchInput
-                    ? searchInput.value
-                    : ""
-            );
-        };
+   window.deleteTask =
+    async function (index) {
 
-    window.deleteTask =
-        function (index) {
+        const task =
+            tasks[index];
 
-            tasks.splice(
-                index,
-                1
-            );
+        await fetch(
+            `http://127.0.0.1:5000/tasks/${task.id}`,
+            {
+                method: "DELETE"
+            }
+        );
 
-            localStorage.setItem(
-                "tasks",
-                JSON.stringify(
-                    tasks
-                )
-            );
-
-            displayTasks(
-                searchInput
-                    ? searchInput.value
-                    : ""
-            );
-        };
+        loadTasks();
+    };
+    
     window.editTask =
-    function (index) {
+    async function (index) {
+
+        const task =
+            tasks[index];
 
         const updatedTask =
             prompt(
                 "Edit task:",
-                tasks[index].name
+                task.title
             );
 
         if (
-            updatedTask &&
-            updatedTask.trim() !== ""
+            !updatedTask ||
+            updatedTask.trim() === ""
         ) {
-
-            tasks[index].name =
-                updatedTask;
-
-            localStorage.setItem(
-                "tasks",
-                JSON.stringify(
-                    tasks
-                )
-            );
-
-            displayTasks(
-                searchInput
-                    ? searchInput.value
-                    : ""
-            );
+            return;
         }
-    };   
 
-    displayTasks();
+        await fetch(
+            `http://127.0.0.1:5000/tasks/${task.id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    title:
+                        updatedTask
+                })
+            }
+        );
+
+        loadTasks();
+    };
+
+    loadTasks();
     filterButtons.forEach(
     (button) => {
 
@@ -671,12 +657,66 @@ const calendarContainer =
 
 if (calendarContainer) {
 
+    async function loadCalendar() {
+
+    const response =
+        await fetch(
+            "http://127.0.0.1:5000/tasks"
+        );
+
     const tasks =
-        JSON.parse(
-            localStorage.getItem(
-                "tasks"
-            )
-        ) || [];
+        await response.json();
+
+    calendarContainer.innerHTML =
+        "";
+
+    if (tasks.length === 0) {
+
+        calendarContainer.innerHTML =
+            `
+            <p class="empty-text">
+                No upcoming tasks.
+            </p>
+            `;
+
+        return;
+    }
+
+    tasks.forEach(
+        (task) => {
+
+            const day =
+                document.createElement(
+                    "div"
+                );
+
+            day.classList.add(
+                "calendar-day"
+            );
+
+            day.innerHTML = `
+                <h3>
+                    📅
+                    ${
+                        task.due_date ||
+                        "No Date"
+                    }
+                </h3>
+
+                <p class="calendar-task">
+                    ${task.title}
+                </p>
+            `;
+
+            calendarContainer
+                .appendChild(
+                    day
+                );
+        }
+    );
+}
+
+loadCalendar();
 
     calendarContainer.innerHTML =
         "";
@@ -707,7 +747,7 @@ if (calendarContainer) {
                 day.innerHTML = `
                     <h3>
                         📅
-                        ${task.dueDate || "No Date"}
+                        ${task.due_date || "No Date"}
                     </h3>
 
                     <p class="calendar-task">
@@ -735,61 +775,67 @@ const totalTasks =
 
 if (totalTasks) {
 
-    const tasks =
-        JSON.parse(
-            localStorage.getItem(
-                "tasks"
-            )
-        ) || [];
+    async function loadAnalytics() {
 
-    const completed =
-        tasks.filter(
-            task =>
-                task.completed
-        ).length;
-
-    const pending =
-        tasks.length -
-        completed;
-
-    const completion =
-        tasks.length === 0
-            ? 0
-            : Math.round(
-                (
-                    completed /
-                    tasks.length
-                ) * 100
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/tasks"
             );
 
-    document.getElementById(
-        "total-tasks"
-    ).textContent =
-        tasks.length;
+        const tasks =
+            await response.json();
 
-    document.getElementById(
-        "completed-tasks"
-    ).textContent =
-        completed;
+        const completed =
+            tasks.filter(
+                task =>
+                    task.completed
+            ).length;
 
-    document.getElementById(
-        "pending-tasks"
-    ).textContent =
-        pending;
+        const pending =
+            tasks.length -
+            completed;
 
-    document.getElementById(
-        "completion-rate"
-    ).textContent =
-        `${completion}%`;
+        const completion =
+            tasks.length === 0
+                ? 0
+                : Math.round(
+                    (
+                        completed /
+                        tasks.length
+                    ) * 100
+                );
 
-    document.getElementById(
-        "analytics-streak"
-    ).textContent =
-        parseInt(
-            localStorage.getItem(
-                "streak"
-            )
-        ) || 0;
+        document.getElementById(
+            "total-tasks"
+        ).textContent =
+            tasks.length;
+
+        document.getElementById(
+            "completed-tasks"
+        ).textContent =
+            completed;
+
+        document.getElementById(
+            "pending-tasks"
+        ).textContent =
+            pending;
+
+        document.getElementById(
+            "completion-rate"
+        ).textContent =
+            `${completion}%`;
+
+        document.getElementById(
+            "analytics-streak"
+        ).textContent =
+            parseInt(
+                localStorage.getItem(
+                    "streak"
+                )
+            ) || 0;
+    }
+
+    loadAnalytics();
 }
 
 // ====================

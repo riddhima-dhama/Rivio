@@ -10,12 +10,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 </head>
 <body>
 
     <div class="dashboard-card">
 
+        <!-- Greeting -->
         <h1 id="welcome">
             Hey 👋
         </h1>
@@ -24,6 +28,7 @@
             Welcome back!
         </p>
 
+        <!-- Stats -->
         <div class="stats">
 
             <div class="stat-card">
@@ -43,21 +48,80 @@
 
         </div>
 
+        <!-- Add Task -->
         <button
             class="primary-btn"
             id="addTaskBtn">
             + Add Task
         </button>
 
+        <!-- Due Today Notification -->
+        <div
+            id="dueTodayBanner"
+            class="due-banner"
+            style="display: none;">
+        </div>
+
+        <!-- Search -->
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Search tasks..."
+        >
+
+        <!-- Filters -->
+        <div class="filters">
+
+            <button
+                class="filter-btn active"
+                data-filter="all">
+                All
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="pending">
+                Pending
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="completed">
+                Completed
+            </button>
+
+        </div>
+        <select id="sortTasks">
+
+    <option value="default">
+        Sort By
+    </option>
+
+    <option value="dueSoon">
+        Due Soon
+    </option>
+
+    <option value="oldest">
+        Oldest First
+    </option>
+
+    <option value="newest">
+        Newest First
+    </option>
+
+</select>
+
+        <!-- Tasks -->
         <div class="tasks">
 
             <h2>Today's Tasks</h2>
 
             <p
-                class="empty-text"
-                id="emptyText">
-                No tasks yet.
-            </p>
+    class="empty-text"
+    id="emptyText">
+    🎉 You're all caught up!<br>
+    Click + Add Task to stay productive.
+</p>
 
             <div id="taskContainer"></div>
 
@@ -111,57 +175,32 @@
                 type="date"
                 id="taskDate"
             >
+
             <select id="taskCategory">
 
-    <option value="📚 Study">
-        📚 Study
-    </option>
+                <option value="📚 Study">
+                    📚 Study
+                </option>
 
-    <option value="💻 Coding">
-        💻 Coding
-    </option>
+                <option value="💻 Coding">
+                    💻 Coding
+                </option>
 
-    <option value="🏋️ Health">
-        🏋️ Health
-    </option>
+                <option value="🏋️ Health">
+                    🏋️ Health
+                </option>
 
-    <option value="🏠 Personal">
-        🏠 Personal
-    </option>
+                <option value="🏠 Personal">
+                    🏠 Personal
+                </option>
 
-</select>
+            </select>
 
             <button
                 class="primary-btn"
                 id="saveTaskBtn">
                 Save Task
             </button>
-            <input
-    type="text"
-    id="searchInput"
-    placeholder="🔍 Search tasks..."
-    <div class="filters">
-
-    <button
-        class="filter-btn active"
-        data-filter="all">
-        All
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="pending">
-        Pending
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="completed">
-        Completed
-    </button>
-
-</div>
->
 
         </div>
 

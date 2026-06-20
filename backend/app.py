@@ -138,22 +138,36 @@ def update_task(task_id):
 
     data = request.get_json()
 
-    completed = data["completed"]
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        """
-        UPDATE tasks
-        SET completed = ?
-        WHERE id = ?
-        """,
-        (
-            completed,
-            task_id
+    if "completed" in data:
+
+        cursor.execute(
+            """
+            UPDATE tasks
+            SET completed = ?
+            WHERE id = ?
+            """,
+            (
+                data["completed"],
+                task_id
+            )
         )
-    )
+
+    if "title" in data:
+
+        cursor.execute(
+            """
+            UPDATE tasks
+            SET title = ?
+            WHERE id = ?
+            """,
+            (
+                data["title"],
+                task_id
+            )
+        )
 
     conn.commit()
     conn.close()
@@ -161,6 +175,7 @@ def update_task(task_id):
     return jsonify({
         "message": "Task updated"
     })
+
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
 
